@@ -13,6 +13,7 @@ gem 'puma'
 group :test do
   gem 'byebug'
   gem 'minitest-rails-capybara'
+  gem 'database_cleaner'
 end
 
 group :development do
