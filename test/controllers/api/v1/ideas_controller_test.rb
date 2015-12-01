@@ -47,4 +47,14 @@ class Api::V1::IdeasControllerTest < ActionController::TestCase
     assert_equal "Updated Idea1", Idea.last.title
     assert_equal "even more fun", Idea.last.body
   end
+
+  test "destroy" do
+    idea = Idea.create(title: "idea1", body: "very fun")
+    starting_count = Idea.all.count
+
+    post :destroy, format: :json, id: idea.id
+
+    assert_equal starting_count - 1, Idea.all.count
+    refute Idea.find_by(id: idea.id)
+  end
 end
