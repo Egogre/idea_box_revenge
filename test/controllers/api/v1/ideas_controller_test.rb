@@ -38,4 +38,13 @@ class Api::V1::IdeasControllerTest < ActionController::TestCase
 
     refute_equal :created, response.status
   end
+
+  test "update" do
+    idea = Idea.create(title: "idea1", body: "very fun")
+    updated_idea = { title: "Updated Idea1", body: "even more fun" }
+
+    post :update, format: :json, id: idea.id, idea: updated_idea
+    assert_equal "Updated Idea1", Idea.last.title
+    assert_equal "even more fun", Idea.last.body
+  end
 end
