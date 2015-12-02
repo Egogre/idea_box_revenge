@@ -1,0 +1,29 @@
+.idea-body {
+margin: 30px 0;
+max-width: 50ch;
+line-height: 1.5;
+overflow: hidden;
+position: relative;
+}
+
+.idea-truncated {
+  max-height: 3em; /*display ellipsis after 2 lines*/
+}
+
+.idea-body:before  {
+background: #fff;
+bottom: 0;
+position: absolute;
+right: 0;
+content: '\2026';
+
+}
+
+.idea-body:after{
+content: '';
+background: #fff;
+position: absolute;
+height: 50px;
+width: 100%;
+z-index: 1;
+}

@@ -15,6 +15,8 @@ group :test do
   gem 'byebug'
   gem 'minitest-rails-capybara'
   gem 'database_cleaner'
+  gem 'selenium-webdriver'
+  gem 'launchy'
 end
 
 group :development do
