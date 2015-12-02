@@ -4,6 +4,9 @@ $(document).ready(function(){
   $('#idea-save').on('click', function(){
     createIdea($ideas, this);
   });
+  $ideas.on('click', '.delete-button', function(){
+    deleteIdea(this);
+  });
 });
 
 function fetchIdeas($ideas) {
@@ -18,13 +21,18 @@ function fetchIdeas($ideas) {
 };
 
 function buildIdeaElement(idea) {
-  return $('<div><h1>'
+  return $('<div id="'
+         + idea.id
+         + '" class="idea'
+         + idea.id
+         + '"><h1>'
          + idea.title
          + '</h1><p><h2>'
          + idea.quality
          + '</h2></p><p class="idea-body idea-truncated">'
          + idea.body
-         + '</p><a href="#" class="expand-toggle">show all</a></div>')
+         + '</p><button class="expand-toggle">show all</button>'
+         + '<button class="delete-button">delete</button></div>')
 };
 
 function createIdea($ideas, saveButton) {
@@ -42,11 +50,26 @@ function createIdea($ideas, saveButton) {
   $.ajax({
     type: 'POST',
     url:  '/api/v1/ideas',
-    data: {idea: { title: title, body: body }},
+    data: { idea: { title: title, body: body } },
     dataType: 'json',
     success: function(response){
       var $ideaElement = buildIdeaElement(response);
       $ideas.prepend($ideaElement);
+    }
+  });
+  //update page (build elements and prepend to ideas)
+}
+
+function deleteIdea(deleteButton) {
+  var $parent = $(deleteButton).parent();
+  var ideaID = $parent.attr('id');
+
+  $.ajax({
+    type: 'DELETE',
+    url:  '/api/v1/ideas/' + ideaID,
+    dataType: 'json',
+    success: function(response){
+      $parent.remove();
     }
   });
   //update page (build elements and prepend to ideas)
