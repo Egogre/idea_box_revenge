@@ -3,6 +3,16 @@ require 'selenium-webdriver'
 
 class UserAddsIdeaTest < Capybara::Rails::TestCase
 
+  def setup
+    super
+    Capybara.current_driver = Capybara.javascript_driver
+  end
+
+  def teardown
+    super
+    Capybara.current_driver = Capybara.default_driver
+  end
+
   test "user can add idea with valid attributes" do
     Idea.create!( title: "Test2", body: "Stuff")
 
