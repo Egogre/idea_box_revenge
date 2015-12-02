@@ -4,6 +4,18 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require "minitest/rails/capybara"
 
+class Capybara::Rails::TestCase
+  def setup
+    super
+    Capybara.current_driver = Capybara.javascript_driver
+  end
+
+  def teardown
+    super
+    Capybara.current_driver = Capybara.default_driver
+  end
+end
+
 class ActiveSupport::TestCase
   self.use_transactional_fixtures = false
 

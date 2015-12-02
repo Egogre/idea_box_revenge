@@ -9,8 +9,8 @@ class UserAddsIdeaTest < Capybara::Rails::TestCase
     visit "/"
 
     within('#add-idea') do
-      fill_in('idea-title', with: 'Trial')
-      fill_in('idea-body', with: 'Test Data')
+      fill_in('new-idea-title', with: 'Trial')
+      fill_in('new-idea-body', with: 'Test Data')
       click_on('save')
     end
 

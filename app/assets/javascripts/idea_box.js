@@ -10,6 +10,9 @@ $(document).ready(function(){
   $ideas.on('click', '.downgrade', function(){
     downgradeIdea(this);
   });
+  $ideas.on('click', '.upgrade', function(){
+    upgradeIdea(this);
+  });
 });
 
 function fetchIdeas($ideas) {
@@ -33,9 +36,9 @@ function buildIdeaElement(idea) {
          + '</h1>'
          + '<button class="upgrade">thumbs up</button>'
          + '<button class="downgrade">thumbs down</button>'
-         + '<p class="idea-quality"><h2>'
+         + '<h2 class="idea-quality">'
          + idea.quality
-         + '</h2></p><p class="idea-body idea-truncated">'
+         + '</h2><p class="idea-body idea-truncated">'
          + idea.body
          + '</p><button class="expand-toggle">show all</button>'
          + '<button class="delete-button">delete</button></div>')
@@ -43,8 +46,8 @@ function buildIdeaElement(idea) {
 
 function createIdea($ideas, saveButton) {
   var $parent = $(saveButton).parent();
-  var $ideaTitle = $parent.find('#idea-title');
-  var $ideaBody = $parent.find('#idea-body');
+  var $ideaTitle = $parent.find('#new-idea-title');
+  var $ideaBody = $parent.find('#new-idea-body');
   //set var title = idea-title.content
   var title = $ideaTitle.val();
   //set var body = idea-body.content
@@ -83,8 +86,8 @@ function deleteIdea(deleteButton) {
 function downgradeIdea(downgradeButton) {
   var $parent = $(downgradeButton).parent();
   var ideaID = $parent.attr('id');
-  var $quality = $parent.find('#idea-quality');
-  var currentQuality = $quality.val();
+  var $quality = $parent.find('.idea-quality');
+  var currentQuality = $quality.text();
   var newQuality = lowerQuality(currentQuality);
 
   $.ajax({
@@ -93,7 +96,25 @@ function downgradeIdea(downgradeButton) {
     data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
     dataType: 'json',
     success: function(response){
-      $quality.val(response.quality);
+      $quality.text(addQuality(newQuality));
+    }
+  });
+}
+
+function upgradeIdea(upgradeButton) {
+  var $parent = $(upgradeButton).parent();
+  var ideaID = $parent.attr('id');
+  var $quality = $parent.find('.idea-quality');
+  var currentQuality = $quality.text();
+  var newQuality = raiseQuality(currentQuality);
+
+  $.ajax({
+    type: 'PATCH',
+    url:  '/api/v1/ideas/' + ideaID,
+    data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
+    dataType: 'json',
+    success: function(response){
+      $quality.text(addQuality(newQuality));
     }
   });
 }
@@ -111,5 +132,15 @@ function raiseQuality(currentQuality) {
     return 1
   } else {
     return 2
+  }
+}
+
+function addQuality(newQualityInt) {
+  if(newQualityInt === 0){
+    return "swill"
+  } else if(newQualityInt === 1) {
+    return "plausible"
+  } else {
+    return "genius"
   }
 }
