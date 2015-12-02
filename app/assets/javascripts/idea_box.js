@@ -72,5 +72,38 @@ function deleteIdea(deleteButton) {
       $parent.remove();
     }
   });
-  //update page (build elements and prepend to ideas)
+}
+
+function downgradeIdea(downgradeButton) {
+  var $parent = $(downgradeButton).parent();
+  var ideaID = $parent.attr('id');
+  var $quality = $parent.find('#idea-quality');
+  var currentQuality = $quality.val();
+  var newQuality = lowerQuality(currentQuality);
+
+  $.ajax({
+    type: 'PATCH',
+    url:  '/api/v1/ideas/' + ideaID,
+    data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
+    dataType: 'json',
+    success: function(response){
+      $quality.val(response.quality);
+    }
+  });
+}
+
+function lowerQuality(currentQuality) {
+  if(currentQuality === "genius"){
+    return 1
+  } else {
+    return 0
+  }
+}
+
+function raiseQuality(currentQuality) {
+  if(currentQuality === "swill"){
+    return 1
+  } else {
+    return 2
+  }
 }

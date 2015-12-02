@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'selenium-webdriver'
 
-class IdeaBoxPageContentTest < Capybara::Rails::TestCase
+class UserAddsIdeaTest < Capybara::Rails::TestCase
 
   test "user can add idea with valid attributes" do
     Idea.create!( title: "Test2", body: "Stuff")
