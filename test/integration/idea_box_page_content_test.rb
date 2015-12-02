@@ -20,12 +20,10 @@ class IdeaBoxPageContentTest < Capybara::Rails::TestCase
   end
 
   test "user sees idea list" do
-    idea = Idea.create!( title: "Test1", body: "Good Times")
-    idea.upgrade
-    idea.upgrade
-    Idea.create!( title: "Test2", body: "Stuff")
+    idea = Idea.create( title: "Test1", body: "Good Times", quality: 2)
+    Idea.create( title: "Test2", body: "Stuff")
     visit '/'
-
+    
     within('#ideas') do
       assert page.has_content?("Test1")
       assert page.has_content?("Good Times")

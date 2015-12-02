@@ -1,6 +1,9 @@
 $(document).ready(function(){
   var $ideas = $('#ideas')
   fetchIdeas($ideas);
+  $('#idea-save').on('click', function(){
+    createIdea($ideas, this);
+  });
 });
 
 function fetchIdeas($ideas) {
@@ -23,3 +26,28 @@ function buildIdeaElement(idea) {
          + idea.body
          + '</p><a href="#" class="expand-toggle">show all</a></div>')
 };
+
+function createIdea($ideas, saveButton) {
+  var $parent = $(saveButton).parent();
+  var $ideaTitle = $parent.find('#idea-title');
+  var $ideaBody = $parent.find('#idea-body');
+  //set var title = idea-title.content
+  var title = $ideaTitle.val();
+  //set var body = idea-body.content
+  var body = $ideaBody.val();
+  //clean both fields
+  $ideaTitle.val('');
+  $ideaBody.val('');
+  //send AJAX post to create with title and body as params
+  $.ajax({
+    type: 'POST',
+    url:  '/api/v1/ideas',
+    data: {idea: { title: title, body: body }},
+    dataType: 'json',
+    success: function(response){
+      var $ideaElement = buildIdeaElement(response);
+      $ideas.prepend($ideaElement);
+    }
+  });
+  //update page (build elements and prepend to ideas)
+}
