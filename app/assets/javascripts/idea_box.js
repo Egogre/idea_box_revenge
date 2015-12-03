@@ -78,16 +78,18 @@ function createIdea($ideas, saveButton) {
 
 function editWindow(editElement) {
   var $parent = $(editElement).parent().parent();
-  var ideaTitle = $parent.find('.edit-idea-title').text();
-  var ideaBody = $parent.find('.edit-idea-body').text();
+  var ideaTitle = $parent.find('.idea-title').text();
+  var ideaBody = $parent.find('.idea-body').text();
   var ideaQuality = $parent.find('.idea-quality').text();
 
   $parent.find('#card1').hide();
   $parent.append(buildEditArea(ideaQuality));
+  $parent.find('#edit-idea-title').val(ideaTitle);
+  $parent.find('#edit-idea-body').val(ideaBody);
 }
 
 function buildEditArea(ideaQuality) {
-  return '<div id ="card2" class="card text-center">'
+  return '<div id ="card2" class="card text-center"><br>'
           + '<input type="text" class="form-control text-center" style="font-size:35px" id="edit-idea-title">'
           + '<br><h2 class="idea-quality">'
           + ideaQuality
