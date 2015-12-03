@@ -7,12 +7,12 @@ $(document).ready(function(){
   $ideas.on('click', '.delete-button', function(){
     deleteIdea(this);
   });
-  // $ideas.on('click', '.edit-idea', function(){
-  //   editWindow(this);
-  // });
-  // $ideas.on('click', '.edit-update', function(){
-  //   editIdea(this);
-  // });
+  $ideas.on('click', '.edit-idea', function(){
+    editWindow(this);
+  });
+  $ideas.on('click', '.edit-update', function(){
+    editIdea(this);
+  });
   $ideas.on('click', '.downgrade', function(){
     downgradeIdea(this);
   });
@@ -37,7 +37,7 @@ function buildIdeaElement(idea) {
          + idea.id
          + '" class="idea'
          + idea.id
-         + '"><div class="card text-center"><h1 class="idea-title">'
+         + '"><div id ="card1" class="card text-center"><h1 class="idea-title">'
          + idea.title
          + '</h1>'
          + '<button class="upgrade btn btn-success">thumbs up</button>'
@@ -77,21 +77,21 @@ function createIdea($ideas, saveButton) {
 }
 
 function editWindow(editElement) {
-  var $parent = $(editElement).parent();
+  var $parent = $(editElement).parent().parent();
   var ideaTitle = $parent.find('.edit-idea-title').text();
   var ideaBody = $parent.find('.edit-idea-body').text();
   var ideaQuality = $parent.find('.idea-quality').text();
 
-  $parent.find('.card').hide();
-  buildEditArea(quality);
+  $parent.find('#card1').hide();
+  $parent.append(buildEditArea(ideaQuality));
 }
 
 function buildEditArea(ideaQuality) {
-  return '<div class="card text-center">'
-          + '<input type="text" id="edit-idea-title">'
-          + '<br><h2 class="idea-quality">Current Quality Rank: '
+  return '<div id ="card2" class="card text-center">'
+          + '<input type="text" class="form-control text-center" style="font-size:35px" id="edit-idea-title">'
+          + '<br><h2 class="idea-quality">'
           + ideaQuality
-          + '</h2><textarea id="edit-idea-body"></textarea>'
+          + '</h2><textarea class="form-control text-center" style="font-size:25px" id="edit-idea-body"></textarea>'
           + '<button class="edit-update btn btn-info">update</button></div>'
 }
 
