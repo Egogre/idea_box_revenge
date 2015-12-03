@@ -1,35 +1,31 @@
 function downgradeIdea(downgradeButton) {
   var $parent = $(downgradeButton).parent().parent();
   var ideaID = $parent.attr('id');
-  var $quality = $parent.find('.idea-quality');
-  var currentQuality = $quality.text();
+  var $qualityElement = $parent.find('.idea-quality');
+  var currentQuality = $qualityElement.text();
   var newQuality = lowerQuality(currentQuality);
 
-  $.ajax({
-    type: 'PATCH',
-    url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {quality: newQuality} },
-    dataType: 'json',
-    success: function(response){
-      $quality.text(addQuality(newQuality));
-    }
-  });
+  patchQuality(ideaID, newQuality, $qualityElement)
 }
 
 function upgradeIdea(upgradeButton) {
   var $parent = $(upgradeButton).parent().parent();
   var ideaID = $parent.attr('id');
-  var $quality = $parent.find('.idea-quality');
-  var currentQuality = $quality.text();
+  var $qualityElement = $parent.find('.idea-quality');
+  var currentQuality = $qualityElement.text();
   var newQuality = raiseQuality(currentQuality);
 
+  patchQuality(ideaID, newQuality, $qualityElement)
+}
+
+function patchQuality(ideaID, newQuality, $qualityElement) {
   $.ajax({
     type: 'PATCH',
     url:  '/api/v1/ideas/' + ideaID,
     data: { idea: {quality: newQuality} },
     dataType: 'json',
     success: function(response){
-      $quality.text(addQuality(newQuality));
+      $qualityElement.text(addQuality(newQuality));
     }
   });
 }
