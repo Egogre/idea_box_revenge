@@ -1,6 +1,6 @@
 $(document).ready(function(){
   var $ideas = $('#ideas')
-  fetchIdeas($ideas);
+  loadIdeas($ideas);
   $('#idea-save').on('click', function(){
     createIdea($ideas, this);
   });
@@ -40,78 +40,11 @@ $(document).ready(function(){
   });
 });
 
-function fetchIdeas($ideas) {
-  $.ajax({
-    type: 'GET',
-    url:  '/api/v1/ideas',
-    success: function(response){
-      var $renderedIdeas = response.map(buildIdeaElement).reverse();
-      $ideas.html($renderedIdeas);
-    }
-  });
-};
-
-function buildIdeaElement(idea) {
-  var showButtons = whichButtons(idea.body.length);
-  return $('<div id="'
-         + idea.id
-         + '" class="idea'
-         + idea.id
-         + '"><div id ="card1" class="card text-center"><h1 class="idea-title">'
-         + idea.title
-         + '</h1>'
-         + '<button class="upgrade btn btn-success">thumbs up</button>'
-         + '<button class="downgrade btn btn-warning">thumbs down</button>'
-         + '<h2 class="idea-quality">Current Quality Rank: '
-         + idea.quality
-         + '</h2><h3 class="idea-body idea-truncated">'
-         + idea.body
-         + '</h3>'
-         + showButtons
-         + '</div></div>')
-};
-
-function whichButtons(bodyLength) {
-  if(bodyLength > 100) {
-    return '<button class="expand-toggle btn">show more</button>'
-    + '<button class="expand-toggle btn hidden">show less</button>'
-    + '<button class="edit-idea btn btn-info">edit</button>'
-    + '<button class="delete-button btn btn-danger">delete</button>'
-  } else {
-    return '<button class="edit-idea btn btn-info">edit</button>'
-    + '<button class="delete-button btn btn-danger">delete</button>'
-  }
-}
-
 function toggleFullBody(toggleButton) {
   var $body = $(toggleButton).parent().find('.idea-body');
   $body.toggleClass('idea-truncated')
   var $toggleButtons = $(toggleButton).parent().find('.expand-toggle');
   $toggleButtons.toggleClass('hidden')
-}
-
-function createIdea($ideas, saveButton) {
-  var $parent = $(saveButton).parent().parent();
-  var $ideaTitle = $parent.find('#new-idea-title');
-  var $ideaBody = $parent.find('#new-idea-body');
-  var title = $ideaTitle.val();
-  var body = $ideaBody.val();
-  $ideaTitle.val('');
-  $ideaBody.val('');
-  postNewIdea($ideas, title, body)
-}
-
-function postNewIdea($ideas, title, body) {
-  $.ajax({
-    type: 'POST',
-    url:  '/api/v1/ideas',
-    data: { idea: { title: title, body: body } },
-    dataType: 'json',
-    success: function(response){
-      var ideaElement = buildIdeaElement(response);
-      $ideas.prepend(ideaElement);
-    }
-  });
 }
 
 function editWindow(editElement) {
@@ -167,66 +100,4 @@ function deleteIdea(deleteButton) {
       $parent.remove();
     }
   });
-}
-
-function downgradeIdea(downgradeButton) {
-  var $parent = $(downgradeButton).parent().parent();
-  var ideaID = $parent.attr('id');
-  var $quality = $parent.find('.idea-quality');
-  var currentQuality = $quality.text();
-  var newQuality = lowerQuality(currentQuality);
-
-  $.ajax({
-    type: 'PATCH',
-    url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {quality: newQuality} },
-    dataType: 'json',
-    success: function(response){
-      $quality.text(addQuality(newQuality));
-    }
-  });
-}
-
-function upgradeIdea(upgradeButton) {
-  var $parent = $(upgradeButton).parent().parent();
-  var ideaID = $parent.attr('id');
-  var $quality = $parent.find('.idea-quality');
-  var currentQuality = $quality.text();
-  var newQuality = raiseQuality(currentQuality);
-
-  $.ajax({
-    type: 'PATCH',
-    url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {quality: newQuality} },
-    dataType: 'json',
-    success: function(response){
-      $quality.text(addQuality(newQuality));
-    }
-  });
-}
-
-function lowerQuality(currentQuality) {
-  if(currentQuality === "Current Quality Rank: genius"){
-    return 1
-  } else {
-    return 0
-  }
-}
-
-function raiseQuality(currentQuality) {
-  if(currentQuality === "Current Quality Rank: swill"){
-    return 1
-  } else {
-    return 2
-  }
-}
-
-function addQuality(newQualityInt) {
-  if(newQualityInt === 0){
-    return "Current Quality Rank: swill"
-  } else if(newQualityInt === 1) {
-    return "Current Quality Rank: plausible"
-  } else {
-    return "Current Quality Rank: genius"
-  }
 }
