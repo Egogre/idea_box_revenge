@@ -1,3 +1,28 @@
+body {
+  background-color: green;
+}
+
+#add-idea {
+  margin-bottom: 50px;
+  padding-bottom: 280px;
+}
+
+.form-control {
+  min-height: 2em;
+}
+
+.card {
+  background-color: white;
+  padding: 10px 20% 10px 20%;
+  margin: 10px 50px 10px 50px;
+
+}
+
+.btn {
+  padding: 5px;
+  margin: 5px;
+}
+
 .idea-body {
 margin: 30px 0;
 max-width: 50ch;

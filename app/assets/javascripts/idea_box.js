@@ -7,6 +7,12 @@ $(document).ready(function(){
   $ideas.on('click', '.delete-button', function(){
     deleteIdea(this);
   });
+  $ideas.on('click', '.edit-idea', function(){
+    editWindow(this);
+  });
+  $ideas.on('click', '.edit-update', function(){
+    editIdea(this);
+  });
   $ideas.on('click', '.downgrade', function(){
     downgradeIdea(this);
   });
@@ -31,17 +37,18 @@ function buildIdeaElement(idea) {
          + idea.id
          + '" class="idea'
          + idea.id
-         + '"><h1>'
+         + '"><div class="card text-center"><h1 class="idea-title">'
          + idea.title
          + '</h1>'
-         + '<button class="upgrade">thumbs up</button>'
-         + '<button class="downgrade">thumbs down</button>'
-         + '<h2 class="idea-quality">'
+         + '<button class="upgrade btn btn-success">thumbs up</button>'
+         + '<button class="downgrade btn btn-warning">thumbs down</button>'
+         + '<h2 class="idea-quality">Current Quality Rank: '
          + idea.quality
-         + '</h2><p class="idea-body idea-truncated">'
+         + '</h2><h3 class="idea-body idea-truncated">'
          + idea.body
-         + '</p><button class="expand-toggle">show all</button>'
-         + '<button class="delete-button">delete</button></div>')
+         + '</h3><button class="expand-toggle">show more</button>'
+         + '<button class="edit-idea btn btn-info">edit</button>'
+         + '<button class="delete-button btn btn-danger">delete</button></div></div>')
 };
 
 function createIdea($ideas, saveButton) {
@@ -67,6 +74,45 @@ function createIdea($ideas, saveButton) {
     }
   });
   //update page (build elements and prepend to ideas)
+}
+
+function editWindow(editElement) {
+  var $parent = $(editElement).parent();
+  var ideaTitle = $parent.find('.edit-idea-title').text();
+  var ideaBody = $parent.find('.edit-idea-body').text();
+  var ideaQuality = $parent.find('.idea-quality').text();
+
+  $parent.find('.card').hide();
+  buildEditArea(quality);
+}
+
+function buildEditArea(ideaQuality) {
+  return '<div class="card text-center">'
+          + '<input type="text" id="edit-idea-title">'
+          + '<br><h2 class="idea-quality">Current Quality Rank: '
+          + ideaQuality
+          + '</h2><textarea id="edit-idea-body"></textarea>'
+          + '<button class="edit-update btn btn-info">update</button></div>'
+}
+
+function editIdea(editElement) {
+  var $parent = $(editElement).parent();
+  var ideaID = $parent.attr('id');
+  var $ideaTitle = $parent.find('.edit-idea-title');
+  var $ideaBody = $parent.find('.edit-idea-body');
+  var title = $ideaTitle.text();
+  var body = $ideaBody.text();
+
+  $.ajax({
+    type: 'POST',
+    url:  '/api/v1/ideas',
+    data: { idea: { title: title, body: body } },
+    dataType: 'json',
+    success: function(response){
+      var $ideaElement = buildIdeaElement(response);
+      $ideas.prepend($ideaElement);
+    }
+  });
 }
 
 function deleteIdea(deleteButton) {

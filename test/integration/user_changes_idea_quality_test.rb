@@ -3,7 +3,7 @@ require 'selenium-webdriver'
 
 class UserChangesIdeaQualityTest < Capybara::Rails::TestCase
 
-  test "user can upgrade idea " do
+  test "user can upgrade idea" do
     idea1 = Idea.create!( title: "Test1", body: "Things")
     idea2 = Idea.create!( title: "Test2", body: "Stuff")
     visit "/"
@@ -37,7 +37,7 @@ class UserChangesIdeaQualityTest < Capybara::Rails::TestCase
     end
   end
 
-  test "user can downgrade idea " do
+  test "user can downgrade idea" do
     idea1 = Idea.create!( title: "Test1", body: "Things")
     idea2 = Idea.create!( title: "Test2", body: "Stuff", quality: 2)
     visit "/"

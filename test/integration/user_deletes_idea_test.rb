@@ -3,7 +3,7 @@ require 'selenium-webdriver'
 
 class UserDeletesIdeaTest < Capybara::Rails::TestCase
 
-  test "user can delete idea " do
+  test "user can delete idea" do
     idea1 = Idea.create!( title: "Test1", body: "Things")
     idea2 = Idea.create!( title: "Test2", body: "Stuff")
     visit "/"

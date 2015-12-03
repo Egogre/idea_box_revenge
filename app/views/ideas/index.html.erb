@@ -1,13 +1,32 @@
 <div class="container">
-  <div class="header">
+  <div class="header jumbotron text-center">
     <h1>
       Idea Box Revenge!
     </h1>
   </div>
-  <div id="add-idea">
-    <input type="text" id="new-idea-title">
-    <textarea id="new-idea-body"></textarea>
-    <button type="submit" id="idea-save">save</button>
+  <div id="add-idea" class="text-center">
+    <h2>Insert Your New Idea:</h2>
+    <div class="col-lg-4 col-lg-offset-4">
+      <div class="row">
+        <h3>Title:</h3>
+        <input type="text" class="form-control text-center" style="font-size:30px" id="new-idea-title">
+      </div>
+    </div>
+    <div class="col-lg-4 col-lg-offset-4">
+      <div class="row">
+        <h3>Body:</h3>
+        <textarea class="form-control text-center" style="font-size:20px" id="new-idea-body"></textarea>
+        <button type="submit" class="btn" id="idea-save">save</button>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="col-lg-4 col-lg-offset-4">
+      <div class="row">
+        <h2>Past Ideas:</h2>
+        <hr>
+      </div>
+    </div>
   </div>
   <div id="ideas">
 
