@@ -98,21 +98,21 @@ function buildEditArea(ideaQuality) {
 }
 
 function editIdea(editElement) {
-  var $parent = $(editElement).parent();
+  var $parent = $(editElement).parent().parent();
   var ideaID = $parent.attr('id');
-  var $ideaTitle = $parent.find('.edit-idea-title');
-  var $ideaBody = $parent.find('.edit-idea-body');
-  var title = $ideaTitle.text();
-  var body = $ideaBody.text();
+  var title = $parent.find('#edit-idea-title').val();
+  var body = $parent.find('#edit-idea-body').val();
 
   $.ajax({
-    type: 'POST',
-    url:  '/api/v1/ideas',
+    type: 'PATCH',
+    url:  '/api/v1/ideas/' + ideaID,
     data: { idea: { title: title, body: body } },
     dataType: 'json',
     success: function(response){
-      var $ideaElement = buildIdeaElement(response);
-      $ideas.prepend($ideaElement);
+      $parent.find('#card1').show();
+      $parent.find('.idea-title').text(title);
+      $parent.find('.idea-body').text(body);
+      $parent.find('#card2').remove();
     }
   });
 }
@@ -141,7 +141,7 @@ function downgradeIdea(downgradeButton) {
   $.ajax({
     type: 'PATCH',
     url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
+    data: { idea: {quality: newQuality} },
     dataType: 'json',
     success: function(response){
       $quality.text(addQuality(newQuality));
@@ -159,7 +159,7 @@ function upgradeIdea(upgradeButton) {
   $.ajax({
     type: 'PATCH',
     url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
+    data: { idea: {quality: newQuality} },
     dataType: 'json',
     success: function(response){
       $quality.text(addQuality(newQuality));
