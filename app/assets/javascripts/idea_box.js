@@ -39,24 +39,3 @@ $(document).ready(function(){
     toggleFullBody(this);
   });
 });
-
-function toggleFullBody(toggleButton) {
-  var $body = $(toggleButton).parent().find('.idea-body');
-  $body.toggleClass('idea-truncated')
-  var $toggleButtons = $(toggleButton).parent().find('.expand-toggle');
-  $toggleButtons.toggleClass('hidden')
-}
-
-function deleteIdea(deleteButton) {
-  var $parent = $(deleteButton).parent().parent();
-  var ideaID = $parent.attr('id');
-
-  $.ajax({
-    type: 'DELETE',
-    url:  '/api/v1/ideas/' + ideaID,
-    dataType: 'json',
-    success: function(response){
-      $parent.remove();
-    }
-  });
-}

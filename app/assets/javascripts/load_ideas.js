@@ -40,3 +40,10 @@ function whichButtons(bodyLength) {
     + '<button class="delete-button btn btn-danger">delete</button>'
   }
 }
+
+function toggleFullBody(toggleButton) {
+  var $body = $(toggleButton).parent().find('.idea-body');
+  $body.toggleClass('idea-truncated')
+  var $toggleButtons = $(toggleButton).parent().find('.expand-toggle');
+  $toggleButtons.toggleClass('hidden')
+}
