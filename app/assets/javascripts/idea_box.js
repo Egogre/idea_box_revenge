@@ -7,12 +7,12 @@ $(document).ready(function(){
   $ideas.on('click', '.delete-button', function(){
     deleteIdea(this);
   });
-  $ideas.on('click', '.edit-idea', function(){
-    editWindow(this);
-  });
-  $ideas.on('click', '.edit-update', function(){
-    editIdea(this);
-  });
+  // $ideas.on('click', '.edit-idea', function(){
+  //   editWindow(this);
+  // });
+  // $ideas.on('click', '.edit-update', function(){
+  //   editIdea(this);
+  // });
   $ideas.on('click', '.downgrade', function(){
     downgradeIdea(this);
   });
@@ -52,7 +52,7 @@ function buildIdeaElement(idea) {
 };
 
 function createIdea($ideas, saveButton) {
-  var $parent = $(saveButton).parent();
+  var $parent = $(saveButton).parent().parent();
   var $ideaTitle = $parent.find('#new-idea-title');
   var $ideaBody = $parent.find('#new-idea-body');
   //set var title = idea-title.content
@@ -116,7 +116,7 @@ function editIdea(editElement) {
 }
 
 function deleteIdea(deleteButton) {
-  var $parent = $(deleteButton).parent();
+  var $parent = $(deleteButton).parent().parent();
   var ideaID = $parent.attr('id');
 
   $.ajax({
@@ -130,7 +130,7 @@ function deleteIdea(deleteButton) {
 }
 
 function downgradeIdea(downgradeButton) {
-  var $parent = $(downgradeButton).parent();
+  var $parent = $(downgradeButton).parent().parent();
   var ideaID = $parent.attr('id');
   var $quality = $parent.find('.idea-quality');
   var currentQuality = $quality.text();
@@ -148,7 +148,7 @@ function downgradeIdea(downgradeButton) {
 }
 
 function upgradeIdea(upgradeButton) {
-  var $parent = $(upgradeButton).parent();
+  var $parent = $(upgradeButton).parent().parent();
   var ideaID = $parent.attr('id');
   var $quality = $parent.find('.idea-quality');
   var currentQuality = $quality.text();
@@ -166,7 +166,7 @@ function upgradeIdea(upgradeButton) {
 }
 
 function lowerQuality(currentQuality) {
-  if(currentQuality === "genius"){
+  if(currentQuality === "Current Quality Rank: genius"){
     return 1
   } else {
     return 0
@@ -174,7 +174,7 @@ function lowerQuality(currentQuality) {
 }
 
 function raiseQuality(currentQuality) {
-  if(currentQuality === "swill"){
+  if(currentQuality === "Current Quality Rank: swill"){
     return 1
   } else {
     return 2
@@ -183,10 +183,10 @@ function raiseQuality(currentQuality) {
 
 function addQuality(newQualityInt) {
   if(newQualityInt === 0){
-    return "swill"
+    return "Current Quality Rank: swill"
   } else if(newQualityInt === 1) {
-    return "plausible"
+    return "Current Quality Rank: plausible"
   } else {
-    return "genius"
+    return "Current Quality Rank: genius"
   }
 }
