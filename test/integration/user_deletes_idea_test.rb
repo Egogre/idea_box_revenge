@@ -10,6 +10,7 @@ class UserDeletesIdeaTest < Capybara::Rails::TestCase
     within(".idea#{idea2.id}") do
       click_on('delete')
     end
+    sleep(1) #allows for js looping to catch up with super fast poltergeist!
 
     within('#ideas') do
       refute page.has_content?("Test2")
