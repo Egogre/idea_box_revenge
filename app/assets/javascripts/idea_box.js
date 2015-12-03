@@ -7,6 +7,12 @@ $(document).ready(function(){
   $ideas.on('click', '.delete-button', function(){
     deleteIdea(this);
   });
+  $ideas.on('click', '.edit-idea', function(){
+    editWindow(this);
+  });
+  $ideas.on('click', '.edit-update', function(){
+    editIdea(this);
+  });
   $ideas.on('click', '.downgrade', function(){
     downgradeIdea(this);
   });
@@ -31,21 +37,22 @@ function buildIdeaElement(idea) {
          + idea.id
          + '" class="idea'
          + idea.id
-         + '"><h1>'
+         + '"><div id ="card1" class="card text-center"><h1 class="idea-title">'
          + idea.title
          + '</h1>'
-         + '<button class="upgrade">thumbs up</button>'
-         + '<button class="downgrade">thumbs down</button>'
-         + '<h2 class="idea-quality">'
+         + '<button class="upgrade btn btn-success">thumbs up</button>'
+         + '<button class="downgrade btn btn-warning">thumbs down</button>'
+         + '<h2 class="idea-quality">Current Quality Rank: '
          + idea.quality
-         + '</h2><p class="idea-body idea-truncated">'
+         + '</h2><h3 class="idea-body idea-truncated">'
          + idea.body
-         + '</p><button class="expand-toggle">show all</button>'
-         + '<button class="delete-button">delete</button></div>')
+         + '</h3><button class="expand-toggle">show more</button>'
+         + '<button class="edit-idea btn btn-info">edit</button>'
+         + '<button class="delete-button btn btn-danger">delete</button></div></div>')
 };
 
 function createIdea($ideas, saveButton) {
-  var $parent = $(saveButton).parent();
+  var $parent = $(saveButton).parent().parent();
   var $ideaTitle = $parent.find('#new-idea-title');
   var $ideaBody = $parent.find('#new-idea-body');
   //set var title = idea-title.content
@@ -69,8 +76,49 @@ function createIdea($ideas, saveButton) {
   //update page (build elements and prepend to ideas)
 }
 
+function editWindow(editElement) {
+  var $parent = $(editElement).parent().parent();
+  var ideaTitle = $parent.find('.idea-title').text();
+  var ideaBody = $parent.find('.idea-body').text();
+  var ideaQuality = $parent.find('.idea-quality').text();
+
+  $parent.find('#card1').hide();
+  $parent.append(buildEditArea(ideaQuality));
+  $parent.find('#edit-idea-title').val(ideaTitle);
+  $parent.find('#edit-idea-body').val(ideaBody);
+}
+
+function buildEditArea(ideaQuality) {
+  return '<div id ="card2" class="card text-center"><br>'
+          + '<input type="text" class="form-control text-center" style="font-size:35px" id="edit-idea-title">'
+          + '<br><h2 class="idea-quality">'
+          + ideaQuality
+          + '</h2><textarea class="form-control text-center" style="font-size:25px" id="edit-idea-body"></textarea>'
+          + '<button class="edit-update btn btn-info">update</button></div>'
+}
+
+function editIdea(editElement) {
+  var $parent = $(editElement).parent().parent();
+  var ideaID = $parent.attr('id');
+  var title = $parent.find('#edit-idea-title').val();
+  var body = $parent.find('#edit-idea-body').val();
+
+  $.ajax({
+    type: 'PATCH',
+    url:  '/api/v1/ideas/' + ideaID,
+    data: { idea: { title: title, body: body } },
+    dataType: 'json',
+    success: function(response){
+      $parent.find('#card1').show();
+      $parent.find('.idea-title').text(title);
+      $parent.find('.idea-body').text(body);
+      $parent.find('#card2').remove();
+    }
+  });
+}
+
 function deleteIdea(deleteButton) {
-  var $parent = $(deleteButton).parent();
+  var $parent = $(deleteButton).parent().parent();
   var ideaID = $parent.attr('id');
 
   $.ajax({
@@ -84,7 +132,7 @@ function deleteIdea(deleteButton) {
 }
 
 function downgradeIdea(downgradeButton) {
-  var $parent = $(downgradeButton).parent();
+  var $parent = $(downgradeButton).parent().parent();
   var ideaID = $parent.attr('id');
   var $quality = $parent.find('.idea-quality');
   var currentQuality = $quality.text();
@@ -93,7 +141,7 @@ function downgradeIdea(downgradeButton) {
   $.ajax({
     type: 'PATCH',
     url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
+    data: { idea: {quality: newQuality} },
     dataType: 'json',
     success: function(response){
       $quality.text(addQuality(newQuality));
@@ -102,7 +150,7 @@ function downgradeIdea(downgradeButton) {
 }
 
 function upgradeIdea(upgradeButton) {
-  var $parent = $(upgradeButton).parent();
+  var $parent = $(upgradeButton).parent().parent();
   var ideaID = $parent.attr('id');
   var $quality = $parent.find('.idea-quality');
   var currentQuality = $quality.text();
@@ -111,7 +159,7 @@ function upgradeIdea(upgradeButton) {
   $.ajax({
     type: 'PATCH',
     url:  '/api/v1/ideas/' + ideaID,
-    data: { idea: {title: "fixed", body: "nonono", quality: newQuality} },
+    data: { idea: {quality: newQuality} },
     dataType: 'json',
     success: function(response){
       $quality.text(addQuality(newQuality));
@@ -120,7 +168,7 @@ function upgradeIdea(upgradeButton) {
 }
 
 function lowerQuality(currentQuality) {
-  if(currentQuality === "genius"){
+  if(currentQuality === "Current Quality Rank: genius"){
     return 1
   } else {
     return 0
@@ -128,7 +176,7 @@ function lowerQuality(currentQuality) {
 }
 
 function raiseQuality(currentQuality) {
-  if(currentQuality === "swill"){
+  if(currentQuality === "Current Quality Rank: swill"){
     return 1
   } else {
     return 2
@@ -137,10 +185,10 @@ function raiseQuality(currentQuality) {
 
 function addQuality(newQualityInt) {
   if(newQualityInt === 0){
-    return "swill"
+    return "Current Quality Rank: swill"
   } else if(newQualityInt === 1) {
-    return "plausible"
+    return "Current Quality Rank: plausible"
   } else {
-    return "genius"
+    return "Current Quality Rank: genius"
   }
 }
