@@ -6,7 +6,7 @@ function createIdea($ideas, saveButton) {
   var body = $ideaBody.val();
   $ideaTitle.val('');
   $ideaBody.val('');
-  postNewIdea($ideas, title, body)
+  postNewIdea($ideas, title, body);
 }
 
 function postNewIdea($ideas, title, body) {

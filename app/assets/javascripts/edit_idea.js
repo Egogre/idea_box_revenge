@@ -11,12 +11,12 @@ function editWindow(editElement) {
 }
 
 function buildEditArea(ideaQuality) {
-  return '<div id ="card2" class="card text-center"><br>'
-          + '<input type="text" class="form-control text-center" style="font-size:35px" id="edit-idea-title">'
-          + '<br><h2 class="idea-quality">'
-          + ideaQuality
-          + '</h2><textarea class="form-control text-center" style="font-size:25px" id="edit-idea-body"></textarea>'
-          + '<button class="edit-update btn btn-info">update</button></div>'
+  return '<div id ="card2" class="card text-center"><br>' +
+         '<input type="text" class="form-control text-center" style="font-size:35px" id="edit-idea-title">' +
+         '<br><h2 class="idea-quality">' +
+         ideaQuality +
+         '</h2><textarea class="form-control text-center" style="font-size:25px" id="edit-idea-body"></textarea>' +
+         '<button class="edit-update btn btn-info">update</button></div>';
 }
 
 function editIdea(editElement) {
@@ -25,7 +25,7 @@ function editIdea(editElement) {
   var title = $parent.find('#edit-idea-title').val();
   var body = $parent.find('#edit-idea-body').val();
 
-  updateIdea(ideaID, title, body, $parent)
+  updateIdea(ideaID, title, body, $parent);
 }
 
 function updateIdea(ideaID, title, body, $parent) {

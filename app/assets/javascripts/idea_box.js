@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  var $ideas = $('#ideas')
+  var $ideas = $('#ideas');
   loadIdeas($ideas);
   $('#idea-save').on('click', function(){
     createIdea($ideas, this);

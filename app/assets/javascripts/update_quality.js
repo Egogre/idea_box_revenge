@@ -5,7 +5,7 @@ function downgradeIdea(downgradeButton) {
   var currentQuality = $qualityElement.text();
   var newQuality = lowerQuality(currentQuality);
 
-  patchQuality(ideaID, newQuality, $qualityElement)
+  patchQuality(ideaID, newQuality, $qualityElement);
 }
 
 function upgradeIdea(upgradeButton) {
@@ -15,7 +15,7 @@ function upgradeIdea(upgradeButton) {
   var currentQuality = $qualityElement.text();
   var newQuality = raiseQuality(currentQuality);
 
-  patchQuality(ideaID, newQuality, $qualityElement)
+  patchQuality(ideaID, newQuality, $qualityElement);
 }
 
 function patchQuality(ideaID, newQuality, $qualityElement) {
@@ -32,26 +32,26 @@ function patchQuality(ideaID, newQuality, $qualityElement) {
 
 function lowerQuality(currentQuality) {
   if(currentQuality === "Current Quality Rank: genius"){
-    return 1
+    return 1;
   } else {
-    return 0
+    return 0;
   }
 }
 
 function raiseQuality(currentQuality) {
   if(currentQuality === "Current Quality Rank: swill"){
-    return 1
+    return 1;
   } else {
-    return 2
+    return 2;
   }
 }
 
 function addQuality(newQualityInt) {
   if(newQualityInt === 0){
-    return "Current Quality Rank: swill"
+    return "Current Quality Rank: swill";
   } else if(newQualityInt === 1) {
-    return "Current Quality Rank: plausible"
+    return "Current Quality Rank: plausible";
   } else {
-    return "Current Quality Rank: genius"
+    return "Current Quality Rank: genius";
   }
 }
